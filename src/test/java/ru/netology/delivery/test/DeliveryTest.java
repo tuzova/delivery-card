@@ -18,13 +18,10 @@ import static com.codeborne.selenide.Selenide.*;
 
 class DeliveryTest {
 
-    private Faker faker;
-
     @BeforeEach
     void setup() {
         Configuration.browser = "chrome";
         open("http://localhost:7777");
-        faker = new Faker(new Locale("ru"));
     }
 
     @Test
@@ -42,6 +39,8 @@ class DeliveryTest {
         $("[data-test-id='phone'] input").setValue(validUser.getPhoneNumber());
         $("[data-test-id=agreement]").click();
         $$("button").find(exactText("Запланировать")).click();
+        $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
+        $("[data-test-id='success-notification'] div.notification__content").shouldHave(exactText("Встреча успешно запланирована на " + firstMeetingDate));
         $("[data-test-id='date'] input").click();
         $("[data-test-id='date'] input").sendKeys(Keys.CONTROL + "A");
         $("[data-test-id='date'] input").sendKeys(Keys.BACK_SPACE);
@@ -50,9 +49,10 @@ class DeliveryTest {
         $("[data-test-id='date'] input").setValue(secondMeetingDate);
         $$("button").find(exactText("Запланировать")).click();
         $(withText("Необходимо подтверждение")).shouldBe(visible, Duration.ofSeconds(15));
-        $$("[data-test-id='replan-notification']").find(exactText("У вас уже запланирована встреча на другую дату. Перепланировать?"));
+        $("[data-test-id='replan-notification'] div.notification__content").shouldBe(visible);
+        $(withText("У вас уже запланирована встреча на другую дату. Перепланировать?")).shouldBe(visible);
         $$("button").find(exactText("Перепланировать")).click();
         $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
-        $$("[data-test-id='notification']").find(exactText("Успешно! Встреча успешно забронирована на " + daysToAddForSecondMeeting));
+        $("[data-test-id='success-notification'] div.notification__content").shouldHave(exactText("Встреча успешно запланирована на " + secondMeetingDate));
     }
 }

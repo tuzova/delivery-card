@@ -9,8 +9,9 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class RegistrationInfo {
     private final String city;
-    private final LocalDate date;
+    //private final LocalDate date;
     private final String name;
     private final String phoneNumber;
 }
 
+// Поле date в структуре класса RegistrationInfo не используется, предлагаю его убрать.
