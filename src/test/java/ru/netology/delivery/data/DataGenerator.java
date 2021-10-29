@@ -18,7 +18,6 @@ public class DataGenerator {
             Faker faker = new Faker(new Locale(locale));
             return new RegistrationInfo(
                     faker.address().city(),
-                    //LocalDate.now().plusDays(1),
                     faker.name().fullName(),
                     faker.phoneNumber().phoneNumber());
         }
